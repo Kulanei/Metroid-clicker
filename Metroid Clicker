@@ -1,0 +1,116 @@
+Let's make a game!
+
+    name:Metroid Clicker
+    desc:Un clicker simple ou il faut faire évoluer Samus Aran dans un environnement hostile.
+    created:13/11/2017
+    updated:13/11/2017
+    version:0.1
+
+Settings
+    building cost increase:110%
+    building cost refund:45%
+
+
+Resources
+    *Ammo
+        name:Munitions
+        desc:Votre arme a besoin de se charger ! une munitions simple consomme 1 unité d'énergie.
+        tag:Armes
+        start with:0
+    *Life
+        name:Vie
+        desc:Ceci est votre vie, si vous tombez à 0, vous devrez attendre d'être sauvé !
+        tag:Stats
+        start with:99
+    *Prime
+        name:Prime
+        desc:Ceci est la prime que vous avez actuellement, elle change celon les actes que vous commettez a travers la galaxies.
+        start with:0
+        hidden when 0
+    *Money
+        name:Argent
+        desc:Ceci est votre argent actuel.
+        start with:0
+    *Trophy
+        name:Trophé
+        desc:Ceci est votre nombre de Trophés, il vous indique votre avancement
+        start with:0
+        hidden when 0
+    *EnergyCap
+        name:Capsule d'énergie
+        desc:Chaque capsule d'énergie donne 100 nouveaux points de vie !
+        start with:5
+        hidden when 0
+    *Renown
+        name:Renom
+        desc:Indique la renommé que vous avez accumulé
+        start with:0
+        
+Buttons
+    *MetroidLarva
+        name:Larve de Metroid
+        desc:Ceci est une larve de Metroid, ils ne sera pas compliqué de la vaincre !
+        text:Attaquer la larve.
+        tag:Metroid
+        cost:5 Ammo
+        req:(Ammo>=5 and Life >= 99+(100*EnergyCap))
+        on click:
+            if (chance(40%))
+                lose 3 Life
+                yield 5 Money
+                lose 5 Ammo
+                yield 10 Renown
+            else
+                lose 6 Life
+                lose 5 Ammo
+            end
+        end
+    *BuyEnergyCaps
+        name:Capsule d'énergie
+        desc:vous permet d'échanger un trophée pour une capsule d'énergie.
+        cost:1 Trophy
+        on click:
+            lose 1 Trophy
+            yield 1 EnergyCap
+        end
+        req:Trophy>=1
+Buildings
+    *LifeSupport
+        name:Station de soin
+        desc:soigne Samus au niveau de 0.1/s/machines
+        start with:7
+        cost:100 Money
+        on tick:
+            if (Life < (99+100*EnergyCap))
+                yield 0.1 Life
+            end
+        
+    *EnergyAcumulator
+        name:Accumulateur d'énergie
+        desc:Régenere petit à petit les munitions
+        start with:6
+        cost:500 Money
+        on tick:
+            yield 0.4 Ammo
+        
+Upgrades
+    
+
+Items
+    
+
+Achievements
+
+Shinies
+    *AmmoPack
+        name:AmmoPack
+        on click:
+            yield 2 Ammo
+            if (chance(40%))
+                yield 2 Ammo
+            end
+        end
+        frequency:5
+        frequency variation:3
+        duration:5
+        movement:anywhere
